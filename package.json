@@ -1,0 +1,19 @@
+{
+  "name": "project-a",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "run": "tsc && node a.js"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/chai": "^4.0.1",
+    "chai": "^4.1.0",
+    "typescript": "^2.4.2",
+    "mocha": "^3.4.2",
+    "mocha-typescript": "^1.1.7"
+
+  }
+}
