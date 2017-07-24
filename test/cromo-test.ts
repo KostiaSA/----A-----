@@ -57,7 +57,6 @@ export class Test {
             prog: [PUSH + 0, PUSH + 1, OR]
         });
 
-
         assert.equal(c.eval([true, true]), true);
         assert.equal(c.eval([true, false]), true);
         assert.equal(c.eval([false, true]), true);

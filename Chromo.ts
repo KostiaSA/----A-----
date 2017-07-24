@@ -3,13 +3,13 @@
 //  2 - or
 //  3 - and
 //  4 - xor
-export const NOP=0;
-export const NOT=1;
-export const OR=2;
-export const AND=3;
-export const XOR=4;
-export const PUSH=1000000;
-export const POP=2000000;
+export const NOP = 0;
+export const NOT = 1;
+export const OR = 2;
+export const AND = 3;
+export const XOR = 4;
+export const PUSH = 1000000;
+export const POP = 2000000;
 
 //  1000000+N - push
 //  2000000+N - pop
@@ -33,25 +33,25 @@ export class Chromo<T extends IChromoProps> {
             else if (cmd >= PUSH) {
                 let inputIndex = cmd - PUSH;
                 let value = inputs[inputIndex];
-                if (!value)
+                if (value === undefined)
                     throw "index error 1";
                 stack.push(value);
             }
-            else if (cmd === 1) { //not
+            else if (cmd === NOT) { //not
                 let stackIndex = stack.length - 1;
                 stack[stackIndex] = !stack[stackIndex];
             }
-            else if (cmd === 2) {
+            else if (cmd === OR) {
                 if (stack.length < 2)
                     return null;
                 stack.push(stack.pop()! || stack.pop()!);
             }
-            else if (cmd === 3) {
+            else if (cmd === AND) {
                 if (stack.length < 2)
                     return null;
                 stack.push(stack.pop()! && stack.pop()!);
             }
-            else if (cmd === 4) {
+            else if (cmd === XOR) {
                 if (stack.length < 2)
                     return null;
                 stack.push(!(stack.pop()! !== stack.pop()!));
@@ -63,6 +63,10 @@ export class Chromo<T extends IChromoProps> {
                 throw "invalid command " + cmd;
 
         }
-        return stack.pop() || null;
+        let ret = stack.pop();
+        if (ret === undefined)
+            return null;
+        else
+            return ret;
     }
 }
