@@ -6,6 +6,7 @@ export interface IGeneticProps {
     inputSet: InputSet;
     outputSet: OutputSet;
     populationSize: number;
+    maxEpoch: number;
 }
 
 export class Genetic {
@@ -25,22 +26,28 @@ export class Genetic {
         }
     }
 
+    epochCount: number;
     currPopulation: Population;
+    bestChromo: IChromoProps;
 
     doPrepare() {
+        if (this.props.inputSet.length !== this.props.outputSet.length || this.props.inputSet.length === 0) {
+            throw "this.props.inputSet.length=?";
+        }
+        this.epochCount = 0;
         this.currPopulation = new Population(this.createPopulation());
     }
 
     doEpoch() {
-        if (this.props.inputSet.length !== this.props.outputSet.length || this.props.inputSet.length === 0) {
-            throw "this.props.inputSet.length=?";
-        }
         this.currPopulation.evalFitnesses(this.props.inputSet, this.props.outputSet);
-
+        this.bestChromo = this.currPopulation.props.bestChromo!;
+        this.epochCount++;
     }
 
     doOptimize() {
         this.doPrepare();
-        this.doEpoch();
+        while (this.epochCount < this.props.maxEpoch) {
+            this.doEpoch();
+        }
     }
 }

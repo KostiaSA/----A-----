@@ -99,9 +99,11 @@ export class Test {
         let inputSet: InputSet = [[true, true], [true, false], [false, true], [false, false]];
         let outputSet: OutputSet = [true, false, false, true];
 
-        assert.equal(c.evalFitness(inputSet, outputSet), 1 + c.props.prog.length / inputSet[0].length);
-        assert.equal(c.evalFitness(inputSet, [false, true, true, false]), 0 + c.props.prog.length / inputSet[0].length);
-        assert.equal(c.evalFitness(inputSet, [true, false, true, false]), 0.5 + c.props.prog.length / inputSet[0].length);
+        let lenKoef = inputSet[0].length / c.props.prog.length;
+
+        assert.equal(c.evalFitness(inputSet, outputSet), 1 * 10 + lenKoef);
+        assert.equal(c.evalFitness(inputSet, [false, true, true, false]), 0 * 10 + lenKoef);
+        assert.equal(c.evalFitness(inputSet, [true, false, true, false]), 0.5 * 10 + lenKoef);
 
     }
 
@@ -120,8 +122,10 @@ export class Test {
         let p = new Population({chromos: [c1.props, c2.props]});
         p.evalFitnesses(inputSet, outputSet);
 
-        assert.equal(p.props.chromos[0].fitness, 0.5 + c1.props.prog.length / inputSet[0].length);
-        assert.equal(p.props.chromos[1].fitness, 0.75 + c1.props.prog.length / inputSet[0].length);
+        let lenKoef = inputSet[0].length / c1.props.prog.length;
+
+        assert.equal(p.props.chromos[0].fitness, 0.75 * 10 + lenKoef);
+        assert.equal(p.props.chromos[1].fitness, 0.5 * 10 + lenKoef);
 
     }
 
@@ -142,16 +146,19 @@ export class Test {
 
         let genProps: IGeneticProps = {
             inputSet: [[true, true], [true, false], [false, true], [false, false]],
-            outputSet: [true, false, true, false],
+            outputSet: [true, false, false, true],
             populationSize: 100,
+            maxEpoch: 10000
         };
 
         let gen = new Genetic();
         gen.props = genProps;
         gen.doOptimize();
+        console.log(gen.bestChromo.fitness, gen.bestChromo);
 
-        console.log(gen.currPopulation.props.chromos)
-//        assert.equal(p.props.chromos[1].fitness, 0.75);
+
+//        console.log(gen.currPopulation.props.chromos)
+        assert.equal(gen.bestChromo.fitness, 2);
 
     }
 }
