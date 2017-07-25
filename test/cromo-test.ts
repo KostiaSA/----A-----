@@ -147,8 +147,9 @@ export class Test {
         let genProps: IGeneticProps = {
             inputSet: [[true, true], [true, false], [false, true], [false, false]],
             outputSet: [true, false, false, true],
-            populationSize: 100,
-            maxEpoch: 100,
+            populationSize: 25,
+            maxEpoch: 10000,
+            noProgressCount:100,
             crossoverP:0,
             mutateP:0,
         };
@@ -171,7 +172,8 @@ export class Test {
             inputSet: [[true, true], [true, false], [false, true], [false, false]],
             outputSet: [true, false, false, true],
             populationSize: 25,
-            maxEpoch: 25,
+            maxEpoch: 10000,
+            noProgressCount:50,
             crossoverP:0.15,
             mutateP:0.15,
         };

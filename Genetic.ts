@@ -10,6 +10,7 @@ export interface IGeneticProps {
     maxEpoch: number;
     crossoverP: number;
     mutateP: number;
+    noProgressCount: number;
 }
 
 export class Genetic {
@@ -33,11 +34,14 @@ export class Genetic {
     currPopulation: Population;
     bestChromo: IChromoProps;
 
+    noProgressCount: number;
+
     doPrepare() {
         if (this.props.inputSet.length !== this.props.outputSet.length || this.props.inputSet.length === 0) {
             throw "this.props.inputSet.length=?";
         }
         this.epochCount = 0;
+        this.noProgressCount = 0;
         this.currPopulation = new Population(this.createPopulation());
     }
 
@@ -45,7 +49,10 @@ export class Genetic {
         this.currPopulation.evalFitnesses(this.props.inputSet, this.props.outputSet);
         if (!this.bestChromo || this.bestChromo.fitness! < this.currPopulation.props.bestChromo!.fitness!) {
             this.bestChromo = this.currPopulation.props.bestChromo!;
+            this.noProgressCount = 0;
         }
+        else
+            this.noProgressCount += 1;
 
         let newPopulation = new Population({chromos: []});
 
@@ -77,7 +84,7 @@ export class Genetic {
 
     doOptimize() {
         this.doPrepare();
-        while (this.epochCount < this.props.maxEpoch) {
+        while (this.epochCount < this.props.maxEpoch && this.noProgressCount < this.props.noProgressCount) {
             this.doEpoch();
         }
     }
