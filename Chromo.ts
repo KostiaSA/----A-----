@@ -3,6 +3,8 @@
 //  2 - or
 //  3 - and
 //  4 - xor
+import {Input, InputSet, OutputSet} from "./Input";
+
 export const NOP = 0;
 export const NOT = 1;
 export const OR = 2;
@@ -16,6 +18,7 @@ export const POP = 2000000;
 
 export interface IChromoProps {
     prog: number[];
+    fitness?: number;
 }
 
 export class Chromo<T extends IChromoProps> {
@@ -23,7 +26,18 @@ export class Chromo<T extends IChromoProps> {
 
     }
 
-    eval(inputs: boolean[]): boolean | null {
+    evalFitness(inputSet: InputSet, outputSet: OutputSet): number {
+        this.props.fitness = 0;
+
+        let totFitness = 0;
+        inputSet.forEach((input, index) => {
+            totFitness += this.eval(input) === outputSet[index] ? 1 : 0;
+        });
+
+        return totFitness / inputSet.length;
+    }
+
+    eval(input: Input): boolean | null {
         let stack: boolean[] = [];
 
         for (let cmd of this.props.prog) {
@@ -32,7 +46,7 @@ export class Chromo<T extends IChromoProps> {
             }
             else if (cmd >= PUSH) {
                 let inputIndex = cmd - PUSH;
-                let value = inputs[inputIndex];
+                let value = input[inputIndex];
                 if (value === undefined)
                     throw "index error 1";
                 stack.push(value);
