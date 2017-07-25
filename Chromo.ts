@@ -47,6 +47,18 @@ export class Chromo {
         return ret;
     }
 
+    static crossover(c1: IChromoProps, c2: IChromoProps): IChromoProps {
+
+        let index = Math.round(Math.min(c1.prog.length, c2.prog.length) / 2);
+
+        return {prog: [...c1.prog.slice(0, index), ...c2.prog.slice(index + 1)]};
+    }
+
+    static mutate(c1: IChromoProps, len: number): IChromoProps {
+        let c2 = Chromo.createNew(len);
+        return Chromo.crossover(c1, c2);
+    }
+
     evalFitness(inputSet: InputSet, outputSet: OutputSet): number {
         let totFitness = 0;
         inputSet.forEach((input, index) => {

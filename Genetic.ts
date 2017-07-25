@@ -1,12 +1,15 @@
 import {InputSet, OutputSet} from "./Input";
 import {IPopulationProps, Population} from "./Population";
 import {Chromo, IChromoProps} from "./Chromo";
+import {getRandomInt} from "./getRandom";
 
 export interface IGeneticProps {
     inputSet: InputSet;
     outputSet: OutputSet;
     populationSize: number;
     maxEpoch: number;
+    crossoverP: number;
+    mutateP: number;
 }
 
 export class Genetic {
@@ -54,7 +57,17 @@ export class Genetic {
                 newCromos.push(oldCromos[i]);
             }
             else {
-                newCromos.push(Chromo.createNew(this.props.inputSet[0].length));
+                let P = Math.random();
+                if (P < this.props.mutateP) {
+                    newCromos.push(Chromo.mutate(oldCromos[i], this.props.inputSet[0].length));
+
+                }
+                else if (P < this.props.mutateP + this.props.crossoverP) {
+                    let oldIndex2 = getRandomInt(0, oldCromos.length / 2);
+                    newCromos.push(Chromo.crossover(oldCromos[i], oldCromos[oldIndex2]));
+                }
+                else
+                    newCromos.push(Chromo.createNew(this.props.inputSet[0].length));
             }
         }
 

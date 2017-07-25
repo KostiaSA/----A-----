@@ -148,7 +148,9 @@ export class Test {
             inputSet: [[true, true], [true, false], [false, true], [false, false]],
             outputSet: [true, false, false, true],
             populationSize: 100,
-            maxEpoch: 100
+            maxEpoch: 100,
+            crossoverP:0,
+            mutateP:0,
         };
 
         let gen = new Genetic();
@@ -158,7 +160,7 @@ export class Test {
 
 
 //        console.log(gen.currPopulation.props.chromos)
-        assert.equal(gen.bestChromo.fitness, 2);
+        assert.equal(gen.bestChromo.fitness, 10+2/3);
 
     }
 
@@ -168,8 +170,10 @@ export class Test {
         let genProps: IGeneticProps = {
             inputSet: [[true, true], [true, false], [false, true], [false, false]],
             outputSet: [true, false, false, true],
-            populationSize: 100,
-            maxEpoch: 1000
+            populationSize: 25,
+            maxEpoch: 25,
+            crossoverP:0.15,
+            mutateP:0.15,
         };
 
         let gen = new Genetic();
@@ -179,7 +183,7 @@ export class Test {
 
 
 //        console.log(gen.currPopulation.props.chromos)
-        assert.equal(gen.bestChromo.fitness, 2);
+        assert.equal(gen.bestChromo.fitness, 10+2/3);
 
     }
 }
