@@ -3,6 +3,7 @@ import {InputSet, OutputSet} from "./Input";
 
 export interface IPopulationProps {
     chromos: IChromoProps[];
+    bestChromo?: IChromoProps;
 }
 
 

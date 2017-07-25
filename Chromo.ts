@@ -53,7 +53,7 @@ export class Chromo {
             totFitness += this.eval(input) === outputSet[index] ? 1 : 0;
         });
 
-        return totFitness / inputSet.length;
+        return totFitness / inputSet.length + this.props.prog.length / inputSet[0].length;
     }
 
     eval(input: Input): boolean | null {
