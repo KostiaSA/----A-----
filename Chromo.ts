@@ -10,8 +10,8 @@ export const NOT = 1;
 export const OR = 2;
 export const AND = 3;
 export const XOR = 4;
+export const POP = 5;
 export const PUSH = 1000000;
-export const POP = 2000000;
 
 //  1000000+N - push
 //  2000000+N - pop
@@ -21,14 +21,25 @@ export interface IChromoProps {
     fitness?: number;
 }
 
-export class Chromo<T extends IChromoProps> {
-    constructor(public props: T) {
+export class Chromo {
+    constructor(public props: IChromoProps) {
 
     }
 
-    evalFitness(inputSet: InputSet, outputSet: OutputSet): number {
-        this.props.fitness = 0;
+    static createNew(inputSet: InputSet): IChromoProps {
+        let progLen = getRandomInt(2, inputSet.length * 5);
+        let ret: IChromoProps = {prog: []};
+        for (let i = 0; i < progLen; i++) {
+            let random = Math.random();
+            if (random < 0.5) {  // команда
 
+            }
+            //ret+=
+        }
+        return ret;
+    }
+
+    evalFitness(inputSet: InputSet, outputSet: OutputSet): number {
         let totFitness = 0;
         inputSet.forEach((input, index) => {
             totFitness += this.eval(input) === outputSet[index] ? 1 : 0;
@@ -41,7 +52,7 @@ export class Chromo<T extends IChromoProps> {
         let stack: boolean[] = [];
 
         for (let cmd of this.props.prog) {
-            if (cmd >= POP) {
+            if (cmd === POP) {
                 stack.pop();
             }
             else if (cmd >= PUSH) {

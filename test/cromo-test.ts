@@ -2,6 +2,7 @@ import {suite, test, slow, timeout, skip, only} from "mocha-typescript";
 import {assert} from "chai";
 import {AND, Chromo, NOP, OR, PUSH, XOR} from "../Chromo";
 import {InputSet, OutputSet} from "../Input";
+import {Population} from "../Population";
 
 @suite("chromo-test")
 //@skip
@@ -97,10 +98,29 @@ export class Test {
         let inputSet: InputSet = [[true, true], [true, false], [false, true], [false, false]];
         let outputSet: OutputSet = [true, false, false, true];
 
-        assert.equal(c.evalFitness(inputSet,outputSet), 1);
-        assert.equal(c.evalFitness(inputSet,[false,true, true ,false]), 0);
-        assert.equal(c.evalFitness(inputSet,[true, false, true ,false]), 0.5);
+        assert.equal(c.evalFitness(inputSet, outputSet), 1);
+        assert.equal(c.evalFitness(inputSet, [false, true, true, false]), 0);
+        assert.equal(c.evalFitness(inputSet, [true, false, true, false]), 0.5);
+
+    }
+
+    @test
+    async eval_population_fitnesses() {
+        let c1 = new Chromo({
+            prog: [PUSH + 0, PUSH + 1, XOR]
+        });
+        let c2 = new Chromo({
+            prog: [PUSH + 0, PUSH + 1, AND]
+        });
+
+        let inputSet: InputSet = [[true, true], [true, false], [false, true], [false, false]];
+        let outputSet: OutputSet = [true, false, true, false];
+
+        let p = new Population({chromos: [c1.props, c2.props]});
+        p.evalFitnesses(inputSet, outputSet);
+
+        assert.equal(p.props.chromos[0].fitness, 0.5);
+        assert.equal(p.props.chromos[1].fitness, 0.75);
 
     }
 }
-
