@@ -13,6 +13,17 @@ export class Test {
     async before() {
     }
 
+    @test
+    async eval_2() {
+        let xx: any = () => {
+            return 1
+        };
+        for (let i = 0; i < 10; i++) {
+            xx = eval("()=>{ return 100} //" + i);
+        }
+        assert.equal(xx(), 100);
+    }
+
 
     @test
     async empty() {
@@ -101,9 +112,29 @@ export class Test {
 
         let lenKoef = inputSet[0].length / c.props.prog.length;
 
-        assert.equal(c.evalFitness(inputSet, outputSet), 1 * 10 + lenKoef);
-        assert.equal(c.evalFitness(inputSet, [false, true, true, false]), 0 * 10 + lenKoef);
-        assert.equal(c.evalFitness(inputSet, [true, false, true, false]), 0.5 * 10 + lenKoef);
+        assert.equal(c.evalFitness(inputSet, outputSet), 1 * 1000 + lenKoef);
+        assert.equal(c.evalFitness(inputSet, [false, true, true, false]), 0 * 1000 + lenKoef);
+        assert.equal(c.evalFitness(inputSet, [true, false, true, false]), 0.5 * 1000 + lenKoef);
+
+    }
+
+    @test
+    async eval_fitness_with_progs() {
+        let progs = [
+            [PUSH + 0, PUSH + 1, AND],
+            [PUSH + 0, PUSH + 1, OR],
+        ];
+
+        let c = new Chromo({
+            prog: [PUSH + 0, PUSH + 1, XOR, progs[0]]
+        });
+
+        let inputSet: InputSet = [[true, true], [true, false], [false, true], [false, false]];
+        let outputSet: OutputSet = [true, false, false, false];
+
+        let lenKoef = inputSet[0].length / c.props.prog.length;
+
+        assert.equal(c.evalFitness(inputSet, outputSet), 1 * 1000 + lenKoef);
 
     }
 
@@ -124,8 +155,8 @@ export class Test {
 
         let lenKoef = inputSet[0].length / c1.props.prog.length;
 
-        assert.equal(p.props.chromos[0].fitness, 0.75 * 10 + lenKoef);
-        assert.equal(p.props.chromos[1].fitness, 0.5 * 10 + lenKoef);
+        assert.equal(p.props.chromos[0].fitness, 0.75 * 1000 + lenKoef);
+        assert.equal(p.props.chromos[1].fitness, 0.5 * 1000 + lenKoef);
 
     }
 
@@ -133,7 +164,7 @@ export class Test {
     async chromo_create_new() {
 
         for (let i = 0; i < 1000; i++) {
-            let c = Chromo.createNew(10);
+            let c = Chromo.createNew(16, []);
         }
         //console.log(c.prog);
 
@@ -149,9 +180,9 @@ export class Test {
             outputSet: [true, false, false, true],
             populationSize: 25,
             maxEpoch: 10000,
-            noProgressCount:100,
-            crossoverP:0,
-            mutateP:0,
+            noProgressCount: 100,
+            crossoverP: 0,
+            mutateP: 0,
         };
 
         let gen = new Genetic();
@@ -161,7 +192,7 @@ export class Test {
 
 
 //        console.log(gen.currPopulation.props.chromos)
-        assert.equal(gen.bestChromo.fitness, 10+2/3);
+        assert.equal(gen.bestChromo.fitness, 1000 + 2 / 3);
 
     }
 
@@ -173,9 +204,9 @@ export class Test {
             outputSet: [true, false, false, true],
             populationSize: 25,
             maxEpoch: 10000,
-            noProgressCount:50,
-            crossoverP:0.15,
-            mutateP:0.15,
+            noProgressCount: 50,
+            crossoverP: 0.15,
+            mutateP: 0.15,
         };
 
         let gen = new Genetic();
@@ -185,7 +216,7 @@ export class Test {
 
 
 //        console.log(gen.currPopulation.props.chromos)
-        assert.equal(gen.bestChromo.fitness, 10+2/3);
+        assert.equal(gen.bestChromo.fitness, 1000 + 2 / 3);
 
     }
 }

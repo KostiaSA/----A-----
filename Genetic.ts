@@ -1,6 +1,6 @@
 import {InputSet, OutputSet} from "./Input";
 import {IPopulationProps, Population} from "./Population";
-import {Chromo, IChromoProps} from "./Chromo";
+import {Chromo, IChromoProps, Prog} from "./Chromo";
 import {getRandomInt} from "./getRandom";
 
 export interface IGeneticProps {
@@ -22,7 +22,7 @@ export class Genetic {
         let progLen = this.props.inputSet[0].length;
 
         for (let i = 0; i < this.props.populationSize; i++) {
-            chromos.push(Chromo.createNew(progLen));
+            chromos.push(Chromo.createNew(progLen, this.bestProgs));
         }
 
         return {
@@ -33,6 +33,7 @@ export class Genetic {
     epochCount: number;
     currPopulation: Population;
     bestChromo: IChromoProps;
+    bestProgs: Prog[];
 
     noProgressCount: number;
 
@@ -50,6 +51,7 @@ export class Genetic {
         if (!this.bestChromo || this.bestChromo.fitness! < this.currPopulation.props.bestChromo!.fitness!) {
             this.bestChromo = this.currPopulation.props.bestChromo!;
             this.noProgressCount = 0;
+            console.log("best:", this.bestChromo.fitness);
         }
         else
             this.noProgressCount += 1;
@@ -60,13 +62,13 @@ export class Genetic {
         let newCromos = newPopulation.props.chromos;
 
         for (let i = 0; i < oldCromos.length; i++) {
-            if (i < oldCromos.length / 10) {
+            if (i < oldCromos.length / 15) {
                 newCromos.push(oldCromos[i]);
             }
             else {
                 let P = Math.random();
                 if (P < this.props.mutateP) {
-                    newCromos.push(Chromo.mutate(oldCromos[i], this.props.inputSet[0].length));
+                    newCromos.push(Chromo.mutate(oldCromos[i], this.props.inputSet[0].length, this.bestProgs));
 
                 }
                 else if (P < this.props.mutateP + this.props.crossoverP) {
@@ -74,7 +76,7 @@ export class Genetic {
                     newCromos.push(Chromo.crossover(oldCromos[i], oldCromos[oldIndex2]));
                 }
                 else
-                    newCromos.push(Chromo.createNew(this.props.inputSet[0].length));
+                    newCromos.push(Chromo.createNew(this.props.inputSet[0].length, this.bestProgs));
             }
         }
 

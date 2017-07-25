@@ -20,8 +20,11 @@ export const PUSH = 1000000;
 //  1000000+N - push
 //  2000000+N - pop
 
+export type ProgCmd = number | number[];
+export type Prog = ProgCmd[];
+
 export interface IChromoProps {
-    prog: number[];
+    prog: ProgCmd[]; // если массив, то это программа
     fitness?: number;
 }
 
@@ -31,7 +34,7 @@ export class Chromo {
     }
 
     // 1 млн в сек. для 10 входов
-    static createNew(inputLen: number): IChromoProps {
+    static createNew(inputLen: number, progs: Prog[]): IChromoProps {
         let progLen = getRandomInt(2, inputLen * 5);
         let ret: IChromoProps = {prog: []};
         for (let i = 0; i < progLen; i++) {
@@ -54,8 +57,8 @@ export class Chromo {
         return {prog: [...c1.prog.slice(0, index), ...c2.prog.slice(index + 1)]};
     }
 
-    static mutate(c1: IChromoProps, len: number): IChromoProps {
-        let c2 = Chromo.createNew(len);
+    static mutate(c1: IChromoProps, len: number, prog: Prog[]): IChromoProps {
+        let c2 = Chromo.createNew(len, prog);
         return Chromo.crossover(c1, c2);
     }
 
@@ -65,14 +68,18 @@ export class Chromo {
             totFitness += this.eval(input) === outputSet[index] ? 1 : 0;
         });
 
-        return totFitness / inputSet.length * 10 + inputSet[0].length / this.props.prog.length;
+        return totFitness / inputSet.length * 1000 + inputSet[0].length / this.props.prog.length;
     }
 
     eval(input: Input): boolean | null {
         let stack: boolean[] = [];
 
         for (let cmd of this.props.prog) {
-            if (cmd === POP) {
+            if (Array.isArray(cmd)) {
+                let c = new Chromo({prog: cmd});
+                stack.push(c.eval(input)!);
+            }
+            else if (cmd === POP) {
                 stack.pop();
             }
             else if (cmd >= PUSH) {
