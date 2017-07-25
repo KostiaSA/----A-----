@@ -4,6 +4,7 @@
 //  3 - and
 //  4 - xor
 import {Input, InputSet, OutputSet} from "./Input";
+import {getRandomInt} from "./getRandom";
 
 export const NOP = 0;
 export const NOT = 1;
@@ -11,6 +12,9 @@ export const OR = 2;
 export const AND = 3;
 export const XOR = 4;
 export const POP = 5;
+
+export const MAX_COMMAND = POP;
+
 export const PUSH = 1000000;
 
 //  1000000+N - push
@@ -26,15 +30,19 @@ export class Chromo {
 
     }
 
-    static createNew(inputSet: InputSet): IChromoProps {
-        let progLen = getRandomInt(2, inputSet.length * 5);
+    // 1 млн в сек. для 10 входов
+    static createNew(inputLen: number): IChromoProps {
+        let progLen = getRandomInt(2, inputLen * 5);
         let ret: IChromoProps = {prog: []};
         for (let i = 0; i < progLen; i++) {
-            let random = Math.random();
-            if (random < 0.5) {  // команда
-
+            if (Math.random() < 0.5) {  // команда
+                let cmd = getRandomInt(0, MAX_COMMAND);
+                ret.prog.push(cmd);
             }
-            //ret+=
+            else {  // PUSH
+                let operandIndex = getRandomInt(0, inputLen - 1);
+                ret.prog.push(PUSH + operandIndex);
+            }
         }
         return ret;
     }

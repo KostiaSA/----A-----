@@ -123,4 +123,16 @@ export class Test {
         assert.equal(p.props.chromos[1].fitness, 0.75);
 
     }
+
+    @test
+    async chromo_create_new() {
+
+        for (let i = 0; i < 1000000; i++) {
+            let c = Chromo.createNew(10);
+        }
+        //console.log(c.prog);
+
+//        assert.equal(p.props.chromos[1].fitness, 0.75);
+
+    }
 }
