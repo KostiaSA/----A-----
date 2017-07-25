@@ -148,7 +148,28 @@ export class Test {
             inputSet: [[true, true], [true, false], [false, true], [false, false]],
             outputSet: [true, false, false, true],
             populationSize: 100,
-            maxEpoch: 10000
+            maxEpoch: 100
+        };
+
+        let gen = new Genetic();
+        gen.props = genProps;
+        gen.doOptimize();
+        console.log(gen.bestChromo.fitness, gen.bestChromo);
+
+
+//        console.log(gen.currPopulation.props.chromos)
+        assert.equal(gen.bestChromo.fitness, 2);
+
+    }
+
+    @test
+    async genetic_2() {
+
+        let genProps: IGeneticProps = {
+            inputSet: [[true, true], [true, false], [false, true], [false, false]],
+            outputSet: [true, false, false, true],
+            populationSize: 100,
+            maxEpoch: 1000
         };
 
         let gen = new Genetic();

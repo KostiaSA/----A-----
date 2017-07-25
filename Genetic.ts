@@ -40,7 +40,25 @@ export class Genetic {
 
     doEpoch() {
         this.currPopulation.evalFitnesses(this.props.inputSet, this.props.outputSet);
-        this.bestChromo = this.currPopulation.props.bestChromo!;
+        if (!this.bestChromo || this.bestChromo.fitness! < this.currPopulation.props.bestChromo!.fitness!) {
+            this.bestChromo = this.currPopulation.props.bestChromo!;
+        }
+
+        let newPopulation = new Population({chromos: []});
+
+        let oldCromos = this.currPopulation.props.chromos;
+        let newCromos = newPopulation.props.chromos;
+
+        for (let i = 0; i < oldCromos.length; i++) {
+            if (i < oldCromos.length / 10) {
+                newCromos.push(oldCromos[i]);
+            }
+            else {
+                newCromos.push(Chromo.createNew(this.props.inputSet[0].length));
+            }
+        }
+
+        this.currPopulation = newPopulation;
         this.epochCount++;
     }
 
