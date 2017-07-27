@@ -18,13 +18,13 @@ export class Test {
         //   console.log(num2base16(100));
     }
 
-    @test
+    @test @timeout(60000)
     async genetic_2() {
 
         let inputSet: InputSet = [];
         let outputSet: OutputSet = [];
 
-        for (let i = 0; i < 500; i++) {
+        for (let i = 0; i < 1000; i++) {
             inputSet.push(num2base16(i));
             outputSet.push((num2base16(i)[5] || num2base16(i)[8]) || num2base16(i)[1]);
         }
@@ -34,7 +34,7 @@ export class Test {
             outputSet: outputSet,
             populationSize: 100,
             maxEpoch: 10000,
-            noProgressCount: 50,
+            noProgressCount: 10,
             crossoverP: 0.2,
             mutateP: 0.2,
         };

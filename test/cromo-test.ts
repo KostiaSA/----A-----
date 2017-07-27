@@ -1,6 +1,6 @@
 import {suite, test, slow, timeout, skip, only} from "mocha-typescript";
 import {assert} from "chai";
-import {AND, Chromo, NOP, OR, PUSH, XOR} from "../Chromo";
+import {AND, Chromo,  OR, PUSH, XOR} from "../Chromo";
 import {InputSet, OutputSet} from "../Input";
 import {Population} from "../Population";
 import {Genetic, IGeneticProps} from "../Genetic";
@@ -55,15 +55,15 @@ export class Test {
         assert.equal(c.eval([true, false]), null);
     }
 
-    @test
-    async nop() {
-        let c = new Chromo({
-            prog: [NOP]
-        });
-
-
-        assert.equal(c.eval([true]), null);
-    }
+    // @test
+    // async nop() {
+    //     let c = new Chromo({
+    //         prog: [NOP]
+    //     });
+    //
+    //
+    //     assert.equal(c.eval([true]), null);
+    // }
 
     @test
     async or_1() {

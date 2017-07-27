@@ -11,7 +11,7 @@
     "jsx": "react",
     "experimentalDecorators":true,
     "strictNullChecks":true,
-    "noStrictGenericChecks":true,
+    //"noStrictGenericChecks":true,
     //    "reactNamespace": "__React"
     "lib": ["es6", "es2015.proxy","es2015.promise","dom"],
     "skipLibCheck": true,

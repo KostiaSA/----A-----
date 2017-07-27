@@ -6,12 +6,12 @@
 import {Input, InputSet, OutputSet} from "./Input";
 import {getRandomInt} from "./getRandom";
 
-export const NOP = 0;
-export const NOT = 1;
-export const OR = 2;
-export const AND = 3;
-export const XOR = 4;
-export const POP = 5;
+//export const NOP = 0;
+export const NOT = 0;
+export const OR = 1;
+export const AND = 2;
+export const XOR = 3;
+export const POP = 4;
 
 export const MAX_COMMAND = POP;
 
@@ -35,10 +35,13 @@ export class Chromo {
 
     // 1 млн в сек. для 10 входов
     static createNew(inputLen: number, progs: Prog[]): IChromoProps {
-        let progLen = getRandomInt(2, inputLen * 5);
+        let progLen = 6;//getRandomInt(3, 6);
         let ret: IChromoProps = {prog: []};
         for (let i = 0; i < progLen; i++) {
-            if (Math.random() < 0.5) {  // команда
+            if (progs.length > 0 && Math.random() < 0.5) {
+                ret.prog.push(progs[getRandomInt(0, progs.length - 1)] as any);
+            }
+            else if (Math.random() < 0.5) {  // команда
                 let cmd = getRandomInt(0, MAX_COMMAND);
                 ret.prog.push(cmd);
             }
@@ -68,7 +71,8 @@ export class Chromo {
             totFitness += this.eval(input) === outputSet[index] ? 1 : 0;
         });
 
-        return totFitness / inputSet.length * 1000 + inputSet[0].length / this.props.prog.length;
+//        return totFitness / inputSet.length * 1000 + inputSet[0].length / this.props.prog.length;
+        return totFitness / inputSet.length * 1000 + 1 / JSON.stringify(this.props.prog).length;
     }
 
     eval(input: Input): boolean | null {
